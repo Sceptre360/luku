@@ -6,181 +6,8 @@
     <title>Cyber Sales Manager</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #1e90ff;
-            --secondary-color: #2c3e50;
-            --accent-color: #3498db;
-            --background-dark: #121212;
-            --text-light: #e0e0e0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: var(--background-dark);
-            color: var(--text-light);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .sidebar {
-            width: 80px;
-            background-color: #1f2937;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            transition: width 0.3s;
-        }
-
-        .sidebar:hover {
-            width: 250px;
-        }
-
-        .sidebar-btn {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 15px;
-            color: var(--text-light);
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .sidebar-btn:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        .sidebar-btn i {
-            margin-right: 15px;
-            font-size: 20px;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #1e2432;
-        }
-
-        .cyber-card {
-            background-color: #2c3e50;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        input, select {
-            background-color: #34495e;
-            border: none;
-            color: var(--text-light);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .cyber-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            margin-bottom: 10px;
-        }
-
-        .cyber-btn:hover {
-            transform: scale(1.05);
-        }
-
-        #salesTable {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #2c3e50;
-        }
-
-        #salesTable th {
-            background-color: #34495e;
-            color: var(--text-light);
-            padding: 10px;
-            text-align: left;
-        }
-
-        #salesTable td {
-            padding: 10px;
-            border-bottom: 1px solid #34495e;
-        }
-
-        .receipt-preview {
-            background-color: white;
-            color: black;
-            padding: 20px;
-            max-width: 400px;
-            margin: 20px auto;
-            position: relative;
-        }
-
-        .download-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .download-btn:hover {
-            background-color: #45a049;
-        }
-
-        #watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 50px;
-            color: rgba(0,0,0,0.1);
-            z-index: 1;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        .currency-toggle {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .currency-toggle button {
-            margin: 0 5px;
-            padding: 5px 10px;
-            background-color: #34495e;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .currency-toggle button.active {
-            background-color: var(--primary-color);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -200,14 +27,98 @@
             <i class="fas fa-dollar-sign"></i>
             <span>Profit Calculator</span>
         </a>
+        <a href="#" class="sidebar-btn" data-section="inventory">
+            <i class="fas fa-box"></i>
+            <span>Inventory</span>
+        </a>
+        <a href="#" class="sidebar-btn donate-btn" onclick="showDonateModal()">
+            <i class="fas fa-gift"></i>
+            <span>Donate</span>
+        </a>
+        <div class="auth-buttons">
+            <a href="#" class="sidebar-btn" onclick="document.getElementById('loginModal').style.display='flex'">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            <a href="#" class="sidebar-btn" onclick="document.getElementById('signupModal').style.display='flex'">
+                <i class="fas fa-user-plus"></i>
+                <span>Sign Up</span>
+            </a>
+            <a href="#" class="sidebar-btn" id="signoutBtn" onclick="handleSignout()" style="display:none">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </a>
+        </div>
     </div>
 
     <div class="main-content">
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('loginModal').style.display='none'">&times;</span>
+                <h2>Login</h2>
+                <form class="input-group" onsubmit="handleLogin(event)">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit" class="cyber-btn">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signupModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('signupModal').style.display='none'">&times;</span>
+                <h2>Sign Up</h2>
+                <form class="input-group" onsubmit="handleSignup(event)">
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                    <button type="submit" class="cyber-btn">Sign Up</button>
+                </form>
+            </div>
+        </div>
+
         <div id="dashboard" class="cyber-card">
             <h2>Sales Dashboard</h2>
-            <div id="dashboardStats">
-                <p>Total Sales: <span id="totalSalesAmount">$0</span></p>
-                <p>Total Products Sold: <span id="totalProductsSold">0</span></p>
+            <div class="dashboard-controls">
+                <div class="date-filter">
+                    <input type="date" id="startDate">
+                    <input type="date" id="endDate">
+                    <button class="cyber-btn" onclick="filterByDate()">Filter</button>
+                </div>
+                <div class="sort-controls">
+                    <select id="sortBy">
+                        <option value="name">Product Name</option>
+                        <option value="quantity">Quantity Sold</option>
+                        <option value="amount">Amount</option>
+                        <option value="date">Date</option>
+                    </select>
+                    <button class="cyber-btn" onclick="sortDashboard()">Sort</button>
+                </div>
+                <button class="cyber-btn danger" onclick="clearDashboard()">Clear Data</button>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <i class="fas fa-box"></i>
+                    <h3>Total Products Sold</h3>
+                    <p id="totalProductsSold">0</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Total Revenue</h3>
+                    <p id="totalSalesAmount">Ksh 0</p>
+                </div>
+            </div>
+
+            <div class="dashboard-charts">
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="productsPieChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -215,17 +126,26 @@
             <h2>Generate Receipt</h2>
             
             <div class="currency-toggle">
-                <button onclick="setCurrency('USD')" class="active">USD ($)</button>
-                <button onclick="setCurrency('KES')">KES (Ksh)</button>
+                <button class="active">KES (Ksh)</button>
             </div>
 
-            <div class="input-group">
+            <form class="input-group" id="receiptForm" onsubmit="addProductToReceipt(event)">
                 <input type="text" id="companyName" placeholder="Company Name" required>
-                <input type="text" id="productName" placeholder="Product Name" required>
-                <input type="number" id="quantity" placeholder="Quantity" required>
-                <input type="number" id="unitPrice" placeholder="Unit Price" required>
-                <button class="cyber-btn" onclick="generateReceipt()">Generate Receipt</button>
-            </div>
+                <div id="productsList">
+                    <div class="product-entry">
+                        <input type="text" class="productName" placeholder="Product Name" required>
+                        <input type="number" class="quantity" placeholder="Quantity" min="1" required>
+                        <input type="number" class="unitPrice" placeholder="Unit Price (KES)" min="0" step="0.01" required>
+                        <button type="button" class="remove-product" onclick="removeProduct(this)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="cyber-btn add-product-btn" onclick="addNewProductField()">
+                    <i class="fas fa-plus"></i> Add Another Product
+                </button>
+                <button type="submit" class="cyber-btn">Generate Receipt</button>
+            </form>
             <div id="receiptPreview" class="receipt-preview">
                 <div id="watermark"></div>
                 <div id="receiptContent"></div>
@@ -237,12 +157,15 @@
 
         <div id="sales" class="cyber-card" style="display:none;">
             <h2>Sales History</h2>
-            <table id="salesTable" style="background-color: red;">
+            <button class="cyber-btn download-sales-btn" onclick="downloadSalesData()">
+                <i class="fas fa-download"></i> Download Sales Data
+            </button>
+            <table id="salesTable">
                 <thead>
                     <tr>
                         <th>Product Name</th>
                         <th>Quantity</th>
-                        <th>Total Sales</th>
+                        <th>Total Sales (KES)</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody"></tbody>
@@ -251,157 +174,71 @@
 
         <div id="profit" class="cyber-card" style="display:none;">
             <h2>Profit & Loss Calculator</h2>
-            <div class="input-group">
-                <input type="text" id="profitProductName" placeholder="Product Name">
-                <input type="number" id="buyingPrice" placeholder="Buying Price">
-                <input type="number" id="sellingPrice" placeholder="Selling Price">
-                <input type="number" id="incurredCost" placeholder="Incurred Cost">
-                <button class="cyber-btn" onclick="calculateProfit()">Calculate Profit</button>
-            </div>
+            <form class="input-group" onsubmit="calculateProfit(); return false;">
+                <input type="text" id="profitProductName" placeholder="Product Name" required>
+                <input type="number" id="buyingPrice" placeholder="Buying Price (KES)" min="0" step="0.01" required>
+                <input type="number" id="sellingPrice" placeholder="Selling Price (KES)" min="0" step="0.01" required>
+                <input type="number" id="incurredCost" placeholder="Incurred Cost (KES)" min="0" step="0.01">
+                <button type="submit" class="cyber-btn">Calculate Profit</button>
+            </form>
             <div id="profitResult"></div>
+        </div>
+
+        <div id="inventory" class="cyber-card" style="display:none;">
+            <h2>Inventory Management</h2>
+            <form class="input-group" id="inventoryForm" onsubmit="addInventoryItem(event)">
+                <input type="text" id="inventoryProductName" placeholder="Product Name" required>
+                <input type="number" id="inventoryBuyingPrice" placeholder="Buying Price (KES)" min="0" step="0.01" required>
+                <input type="number" id="inventorySellingPrice" placeholder="Expected Selling Price (KES)" min="0" step="0.01" required>
+                <input type="number" id="inventoryQuantity" placeholder="Quantity" min="1" required>
+                <button type="submit" class="cyber-btn">Add to Inventory</button>
+            </form>
+
+            <div class="inventory-list">
+                <h3>Current Inventory</h3>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Buying Price</th>
+                            <th>Selling Price</th>
+                            <th>Initial Quantity</th>
+                            <th>Remaining</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Global Variables
-        let salesData = [];
-        let currentCurrency = 'USD';
-        const exchangeRate = 160; // 1 USD = 160 KES
+    <script src="app.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
 
-        // Section Navigation
-        document.querySelectorAll('.sidebar-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const sectionId = this.getAttribute('data-section');
-                document.querySelectorAll('.main-content > div').forEach(section => {
-                    section.style.display = 'none';
-                });
-                document.getElementById(sectionId).style.display = 'block';
-            });
-        });
-
-        function setCurrency(currency) {
-            currentCurrency = currency;
-            document.querySelectorAll('.currency-toggle button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        function formatAmount(amount) {
-            if (currentCurrency === 'USD') {
-                return `$${amount.toFixed(2)}`;
-            } else {
-                return `Ksh ${(amount * exchangeRate).toFixed(2)}`;
-            }
-        }
-
-        function generateReceipt() {
-            const companyName = document.getElementById('companyName').value;
-            const productName = document.getElementById('productName').value;
-            const quantity = parseFloat(document.getElementById('quantity').value);
-            const unitPrice = parseFloat(document.getElementById('unitPrice').value);
-            const totalSales = quantity * unitPrice;
-            const currentDate = new Date().toLocaleDateString();
-
-            // Validate inputs
-            if (!companyName || !productName || !quantity || !unitPrice) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Update watermark
-            document.getElementById('watermark').textContent = companyName;
-
-            const receiptHtml = `
-                <h3>${companyName} Receipt</h3>
-                <p>Product: ${productName}</p>
-                <p>Quantity: ${quantity}</p>
-                <p>Unit Price: ${formatAmount(unitPrice)}</p>
-                <p>Total: ${formatAmount(totalSales)}</p>
-                <p>Date: ${currentDate}</p>
-            `;
-
-            // Update receipt content
-            document.getElementById('receiptContent').innerHTML = receiptHtml;
-
-            // Show download button
-            document.querySelector('.download-btn').style.display = 'block';
-
-            // Store sales data
-            salesData.push({
-                productName,
-                quantity,
-                totalSales
-            });
-
-            updateSalesTable();
-            updateDashboard();
-        }
-
-        function updateSalesTable() {
-            const tableBody = document.getElementById('salesTableBody');
-            tableBody.innerHTML = '';
-            salesData.forEach(sale => {
-                const row = `
-                    <tr>
-                        <td>${sale.productName}</td>
-                        <td>${sale.quantity}</td>
-                        <td>${formatAmount(sale.totalSales)}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        }
-
-        function updateDashboard() {
-            const totalSales = salesData.reduce((sum, sale) => sum + sale.totalSales, 0);
-            const totalProducts = salesData.reduce((sum, sale) => sum + sale.quantity, 0);
-
-            document.getElementById('totalSalesAmount').textContent = formatAmount(totalSales);
-            document.getElementById('totalProductsSold').textContent = totalProducts;
-        }
-
-        function downloadReceiptAsPNG() {
-            // Use html2canvas to convert receipt to image
-            const receiptElement = document.getElementById('receiptPreview');
-            
-            html2canvas(receiptElement, {
-                scale: 2, // Increases resolution
-                backgroundColor: 'white' // Ensures white background
-            }).then(canvas => {
-                // Create a link element to download the image
-                const link = document.createElement('a');
-                link.download = `receipt_${new Date().toISOString().slice(0,10)}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
-
-        function calculateProfit() {
-            const productName = document.getElementById('profitProductName').value;
-            const buyingPrice = parseFloat(document.getElementById('buyingPrice').value);
-            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
-            const incurredCost = parseFloat(document.getElementById('incurredCost').value);
-
-            // Validate inputs
-            if (!productName || !buyingPrice || !sellingPrice || !incurredCost) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            const profit = (sellingPrice - buyingPrice - incurredCost);
-            const profitStatus = profit > 0 ? 'Profit' : 'Loss';
-
-            const resultHtml = `
-                <h3>Profit Analysis for ${productName}</h3>
-                <p>Buying Price: ${formatAmount(buyingPrice)}</p>
-                <p>Selling Price: ${formatAmount(sellingPrice)}</p>
-                <p>Incurred Cost: ${formatAmount(incurredCost)}</p>
-                <p>Total ${profitStatus}: ${formatAmount(Math.abs(profit))}</p>
-            `;
-
-            document.getElementById('profitResult').innerHTML = resultHtml;
-        }
-    </script>
+    <!-- Donate Modal -->
+    <div id="donateModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-mobile-alt"></i> M-Pesa Donation</h2>
+            <div class="mpesa-instructions">
+                <p>To donate via M-Pesa:</p>
+                <ol>
+                    <li>Go to M-Pesa menu</li>
+                    <li>Select "Send Money"</li>
+                    <li>Enter number: <strong>0748825274</strong></li>
+                    <li>Enter amount</li>
+                    <li>Enter your PIN</li>
+                    <li>Confirm the transaction</li>
+                </ol>
+                <div class="mpesa-number">
+                    <span>M-Pesa Number:</span>
+                    <span class="number">0748825274</span>
+                    <button onclick="copyMpesaNumber()" class="cyber-btn">
+                        <i class="fas fa-copy"></i> Copy Number
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
