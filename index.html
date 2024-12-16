@@ -160,16 +160,19 @@
             <button class="cyber-btn download-sales-btn" onclick="downloadSalesData()">
                 <i class="fas fa-download"></i> Download Sales Data
             </button>
-            <table id="salesTable">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Total Sales (KES)</th>
-                    </tr>
-                </thead>
-                <tbody id="salesTableBody"></tbody>
-            </table>
+            <div class="table-wrapper">
+                <div class="table-scroll-hint">Scroll horizontally to view more →</div>
+                <table id="salesTable">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Total Sales (KES)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="profit" class="cyber-card" style="display:none;">
@@ -196,19 +199,22 @@
 
             <div class="inventory-list">
                 <h3>Current Inventory</h3>
-                <table id="inventoryTable">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Buying Price</th>
-                            <th>Selling Price</th>
-                            <th>Initial Quantity</th>
-                            <th>Remaining</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventoryTableBody"></tbody>
-                </table>
+                <div class="table-wrapper">
+                    <div class="table-scroll-hint">Scroll horizontally to view more →</div>
+                    <table id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Buying Price</th>
+                                <th>Selling Price</th>
+                                <th>Initial Quantity</th>
+                                <th>Remaining</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
